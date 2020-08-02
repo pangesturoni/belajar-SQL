@@ -1,0 +1,184 @@
+Microsoft Windows [Version 10.0.18362.959]
+(c) 2019 Microsoft Corporation. All rights reserved.
+
+C:\Users\ARI>cd C:\xampp\mysql\bin
+
+C:\xampp\mysql\bin>mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 119
+Server version: 10.4.13-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+/* jawaban no 1 */
+MariaDB [(none)]> CREATE DATABASES myshop;
+Query OK, 1 row affected (0.00 sec)
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| myshop             |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.001 sec)
+
+
+/* jawaban no 2 */
+MariaDB [(none)]> use myshop;
+Database changed
+MariaDB [myshop]> CREATE TABLE users(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), email VARCHAR(255), password VARCHAR(255))
+    -> ;
+Query OK, 0 rows affected (0.847 sec)
+
+
+MariaDB [myshop]> SHOW TABLES
+    -> ;
++------------------+
+| Tables_in_myshop |
++------------------+
+| users            |
++------------------+
+1 row in set (0.001 sec)
+
+MariaDB [myshop]> CREATE TABLE items(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), description VARCHAR(255), price INT, stock INT, category_id INT);
+Query OK, 0 rows affected (2.371 sec)
+
+MariaDB [myshop]> CREATE TABLE categories(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255));
+Query OK, 0 rows affected (0.771 sec)
+
+MariaDB [myshop]> SHOW TABLES
+    -> ;
++------------------+
+| Tables_in_myshop |
++------------------+
+| categories       |
+| items            |
+| users            |
++------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [myshop]> ALTER TABLE items ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+Query OK, 0 rows affected (4.501 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+/* jawaban no 3 */
+
+MariaDB [myshop]> INSERT INTO users (name, email, password) VALUES ('Jhon Doe', 'jhon@doe.com', 'jhon123'), ('Jane Doe', 'jane@doe.com', 'jenita123');
+Query OK, 2 rows affected (0.126 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+MariaDB [myshop]> SELECT * FROM users
+    -> ;
++----+----------+--------------+-----------+
+| id | name     | email        | password  |
++----+----------+--------------+-----------+
+|  1 | Jhon Doe | jhon@doe.com | jhon123   |
+|  2 | Jane Doe | jane@doe.com | jenita123 |
++----+----------+--------------+-----------+
+2 rows in set (0.088 sec)
+
+MariaDB [myshop]> INSERT INTO categories (name) VALUES ('gadget');
+Query OK, 1 row affected (0.328 sec)
+MariaDB [myshop]> INSERT INTO categories (name) VALUES ('cloth');
+Query OK, 1 row affected (0.069 sec)
+MariaDB [myshop]> INSERT INTO categories (name) VALUES ('men');
+Query OK, 1 row affected (0.241 sec)
+MariaDB [myshop]> INSERT INTO categories (name) VALUES ('women');
+Query OK, 1 row affected (0.140 sec)
+MariaDB [myshop]> INSERT INTO categories (name) VALUES ('branded');
+Query OK, 1 row affected (0.124 sec)
+MariaDB [myshop]> SELECT * FROM categories
+    -> ;
++----+---------+
+| id | name    |
++----+---------+
+|  1 | gadget  |
+|  2 | cloth   |
+|  3 | men     |
+|  4 | women   |
+|  5 | branded |
++----+---------+
+5 rows in set (0.000 sec)
+
+
+MariaDB [myshop]> INSERT INTO items (name, description, price, stock, category_id) VALUES ('Sumsang b50', 'hape keren dari merek sumsang', '4000000',100, 1),('Uniklooh', 'baju keren dari brand ternama', '500000', 50, 2), ('IMHO Watch', 'jam tangan anak yang jujur banget', '20000000',10, 1);
+Query OK, 3 rows affected (0.097 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [myshop]> SELECT * FROM items
+    -> ;
++----+-------------+-----------------------------------+----------+-------+-------------+
+| id | name        | description                       | price    | stock | category_id |
++----+-------------+-----------------------------------+----------+-------+-------------+
+|  1 | Sumsang b50 | hape keren dari merek sumsang     |  4000000 |   100 |           1 |
+|  2 | Uniklooh    | baju keren dari brand ternama     |   500000 |    50 |           2 |
+|  3 | IMHO Watch  | jam tangan anak yang jujur banget | 20000000 |    10 |           1 |
++----+-------------+-----------------------------------+----------+-------+-------------+
+3 rows in set (0.000 sec)
+
+
+/* jawaban no 4 */
+
+MariaDB [myshop]> SELECT id,name,email FROM users;
++----+----------+--------------+
+| id | name     | email        |
++----+----------+--------------+
+|  1 | Jhon Doe | jhon@doe.com |
+|  2 | Jane Doe | jane@doe.com |
++----+----------+--------------+
+2 rows in set (0.001 sec)
+
+MariaDB [myshop]> SELECT * FROM items WHERE price>1000000;
++----+-------------+-----------------------------------+----------+-------+-------------+
+| id | name        | description                       | price    | stock | category_id |
++----+-------------+-----------------------------------+----------+-------+-------------+
+|  1 | Sumsang b50 | hape keren dari merek sumsang     |  4000000 |   100 |           1 |
+|  3 | IMHO Watch  | jam tangan anak yang jujur banget | 20000000 |    10 |           1 |
++----+-------------+-----------------------------------+----------+-------+-------------+
+2 rows in set (0.000 sec)
+
+MariaDB [myshop]> SELECT * FROM items WHERE name LIKE '%uniklo%';
++----+----------+-------------------------------+--------+-------+-------------+
+| id | name     | description                   | price  | stock | category_id |
++----+----------+-------------------------------+--------+-------+-------------+
+|  2 | Uniklooh | baju keren dari brand ternama | 500000 |    50 |           2 |
++----+----------+-------------------------------+--------+-------+-------------+
+1 row in set (0.001 sec)
+
+MariaDB [myshop]> SELECT items.name, items.description, items.price, items.stock, items.category_id, categories.name AS kategori FROM items INNER JOIN categories ON items.category_id=categories.id;
++-------------+-----------------------------------+---------+-------+-------------+----------+
+| name        | description                       | price   | stock | category_id | kategori |
++-------------+-----------------------------------+---------+-------+-------------+----------+
+| Sumsang b50 | hape keren dari merek sumsang     | 2500000 |   100 |           1 | gadget   |
+| Uniklooh    | baju keren dari brand ternama     |  500000 |    50 |           2 | cloth    |
+| IMHO Watch  | jam tangan anak yang jujur banget | 2000000 |    10 |           1 | gadget   |
++-------------+-----------------------------------+---------+-------+-------------+----------+
+3 rows in set (0.001 sec)
+
+
+
+/* jawaban n0 5*/
+MariaDB [myshop]> UPDATE items SET price=2500000 WHERE id=1;
+Query OK, 1 row affected (0.094 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+MariaDB [myshop]> UPDATE items SET price=2000000 WHERE id=3;
+Query OK, 1 row affected (0.124 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [myshop]> SELECT * FROM items
+    -> ;
++----+-------------+-----------------------------------+---------+-------+-------------+
+| id | name        | description                       | price   | stock | category_id |
++----+-------------+-----------------------------------+---------+-------+-------------+
+|  1 | Sumsang b50 | hape keren dari merek sumsang     | 2500000 |   100 |           1 |
+|  2 | Uniklooh    | baju keren dari brand ternama     |  500000 |    50 |           2 |
+|  3 | IMHO Watch  | jam tangan anak yang jujur banget | 2000000 |    10 |           1 |
++----+-------------+-----------------------------------+---------+-------+-------------+
+3 rows in set (0.000 sec)
